@@ -34,18 +34,24 @@ typedef struct{
 
 int main()
 {
-    //Ht
-    //Ht
-    //Ht
-    char album[201];
-    char artista[101];
-    char cancion[101];
-    int minutos;
-    int segundos;
+    HashTable *artista;
+    HashTable *album;
+    HashTable *cancion;
+    FILE *nombreArchivo;
+    char linea[1024];
+    char nombre[301];
     int opcion;
-
+    
+    char cancion[101];
+    char artista[101];
+    int minutos;
+    char auxMin[3];
+    int segundos;
+    char auxSeg[3];
+    char album[201];
     do{
-        printf("       Gestionador de Musica de Rodolfo \n");
+        printf(" _____________________________________________\n");
+        printf("|       Gestionador de Musica de Rodolfo      |\n");
         printf("|---------------------------------------------|\n");
         printf("| 1.- Importar musica desde un archivo '.csv' |\n");
         printf("| 2.- Exportar musica a un '.csv'             |\n");
@@ -58,9 +64,14 @@ int main()
         printf("| 9.- Salir del Gestionador                   |\n");
         printf("|_____________________________________________|\n");
         scanf("%d", &opcion);
+        getchar();
         switch(opcion){
         case 1:
-            
+            printf("\nIngrese el nombre del archivo sin su extension :");
+            scanf("%s", &nombre);
+            strcat(nombre, ".csv");
+            if(nombreArchivo != NULL) cargarArchivo(nombre);
+            else printf("El archivo .csv no existe...\n");
             break;
         case 2:
 
@@ -69,7 +80,22 @@ int main()
 
             break;
         case 4:
-
+            printf("Ingrese la cancion con el siguiente formato...\n");
+            printf("Nombre,Artista,Minutos:Segundos,Album \n");
+            fgets(linea, 1023, stdin);
+            strtok(linea, "\n");
+            strcpy(cancion, strtok(linea, ","));
+            strcpy(artista, strtok(NULL, ","));
+            strcpy(auxMin, strtok(NULL, ":"));
+            strcpy(auxSeg, strtok(NULL, ","));
+            strcpy(album, strtok(NULL, "\n"));
+            minutos = atoi(auxMin);
+            segundos = atoi(auxSeg);
+            /**
+             * Buscar primero si el artista existe, si no existe crearlo
+             * Buscar segundo si el album existe, si no existe crearlo
+             * Buscar si en el Album la cancion ya existe, sino no agregarla
+             * */
             break;
         case 5:
 

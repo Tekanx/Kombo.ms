@@ -16,14 +16,14 @@ typedef struct HT_Prop{
     /** Puntero al Valor */
     void *valor;
 
-}HT_Valores;
+}HT_Prop;
 
 typedef struct HashTable{
     /** Arreglo de punteros a Valores*/
-    HT_Valores **valores;
+    HT_Prop **valores;
     /** Cantidad de datos no nulos en el HT*/
     long cont;
-    /** Tamaño del Arreglo*/
+    /** Tamaï¿½o del Arreglo*/
     long size;
     /** Variable para poder recorrer el Arreglo*/
     long current;
@@ -35,7 +35,7 @@ typedef struct HashTable{
 HashTable *createHashTable(long size) {
     HashTable *tabla =(HashTable *) calloc(1, sizeof(HashTable));
     assert(tabla != NULL);                              //Si no hay memoria para reservar la Tabla
-    tabla -> valores = calloc(size, sizeof(HT_Valores));
+    tabla -> valores = calloc(size, sizeof(HT_Prop));
     tabla -> cont = 0;
     tabla -> size = size;
     tabla -> current = -1;
@@ -43,9 +43,9 @@ HashTable *createHashTable(long size) {
     return tabla;
 }
 
-HT_Valores *crearValores(const char *llave, void *valor){
-    HT_Valores *newValor;
-    newValor = calloc(1, sizeof(HT_Valores));
+HT_Prop *crearValores(const char *llave, void *valor){
+    HT_Prop *newValor;
+    newValor = calloc(1, sizeof(HT_Prop));
     newValor -> llave = strdup(llave);
     newValor -> valor = strdup(valor);
     if(newValor == NULL) return NULL;
@@ -78,7 +78,7 @@ long linearProbing(HashTable *tabla, const char *key) {
 }
 
 void insertHashTable(HashTable *tabla, const char *llave, void *valor) {
-    HT_Valores *V = calloc(1, sizeof(HT_Valores));
+    HT_Prop *V = calloc(1, sizeof(HT_Prop));
     V = crearValores(llave, valor);
     long posicionllave;
     posicionllave = linearProbing(tabla, llave) % tabla -> size;
@@ -92,13 +92,13 @@ void insertHashTable(HashTable *tabla, const char *llave, void *valor) {
 
 void enlarge(HashTable *tabla) {
     long oldsize;
-    HT_Valores **old = tabla -> valores;
+    HT_Prop **old = tabla -> valores;
     oldsize = tabla -> size;
-    tabla -> valores = calloc(oldsize * 2, sizeof(HT_Valores));
+    tabla -> valores = calloc(oldsize * 2, sizeof(HT_Prop));
     tabla -> cont = 0;
     tabla -> size = oldsize * 2;
     tabla -> factorCarga = (long) ceil((oldsize * 2) * 0.77);
-    for(int i = 0 ; i < oldsize ; i++){                                         //Se usa el tamaño antiguo y no el nuevo
+    for(int i = 0 ; i < oldsize ; i++){                                         //Se usa el tamaï¿½o antiguo y no el nuevo
         if(old[i] != NULL){
             insertHashTable(tabla, old[i] -> llave, old[i] -> valor);
             free(old[i]);

@@ -153,7 +153,7 @@ void  popCurrent(List *list) {
 
 void Vaciar (List *list) {
     assert(list != NULL); // list no puede ser NULL.
-    while ((list->head) != NULL) popFront(list);
+    while ((list -> head) != NULL) popFront(list);
     free(list);
 }
 

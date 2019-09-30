@@ -8,8 +8,62 @@ typedef struct HashTable HashTable;
 
 /**
 
+ @param size indica el tamaño que el mapa debe tener una vez que se crea
+ @return retorna el mapa con el tamaño ingresado
+*/
+HashTable *createHashTable(long size);
+
+/**
+
  @param
  @return
 */
+HT_Prop *crearValores(const char *llave, void *valor);
+
+/**
+
+ @param
+ @return
+*/
+unsigned long stringHash(const char * key);
+
+/**
+
+ @param
+ @return
+*/
+long linearProbing(HashTable *tabla, const char *key);
+
+void insertHashTable(HashTable *tabla, const char *llave, void *valor);
+
+void enlarge(HashTable *tabla);
+
+/**
+
+ @param
+ @return
+*/
+void *searchHashTable(HashTable *tabla, const char * llave);
+
+/**
+
+ @param
+ @return
+*/
+void *eraseValueAndSearchKeyHashTable(HashTable *tabla, const char *llave);
+
+/**
+
+ @param
+ @return
+*/
+void *firstHashTable(HashTable *tabla);
+
+/**
+
+ @param
+ @return
+*/
+void *nextHashTable(HashTable * tabla);
 
 #endif
