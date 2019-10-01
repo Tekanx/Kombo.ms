@@ -41,14 +41,6 @@ int main()
     char linea[1024];
     char nombre[301];
     int opcion;
-    
-    char cancion[101];
-    char artista[101];
-    int minutos;
-    char auxMin[3];
-    int segundos;
-    char auxSeg[3];
-    char album[201];
     do{
         printf(" _____________________________________________\n");
         printf("|       Gestionador de Musica de Rodolfo      |\n");
