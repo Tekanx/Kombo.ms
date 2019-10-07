@@ -32,23 +32,19 @@ typedef struct{
     int duracion;               //En segundos;
 } Cancion;
 
+Artista *getLinea(char linea[1024], HashTable artistaHT);
+
+bool cargarArchivo(char nombre[301], HashTable artistaHT, HashTable albumHT, HashTable cancionHT);
+
 int main()
 {
-    HashTable *artista;
-    HashTable *album;
-    HashTable *cancion;
-    FILE *nombreArchivo;
+    HashTable *artistaHT = createHashTable(1);
+    HashTable *albumHT = createHashTable(1);
+    HashTable *cancionHT = createHashTable(1);
+    Artista *artistaAux;
     char linea[1024];
     char nombre[301];
     int opcion;
-    
-    char cancion[101];
-    char artista[101];
-    int minutos;
-    char auxMin[3];
-    int segundos;
-    char auxSeg[3];
-    char album[201];
     do{
         printf(" _____________________________________________\n");
         printf("|       Gestionador de Musica de Rodolfo      |\n");
@@ -70,27 +66,22 @@ int main()
             printf("\nIngrese el nombre del archivo sin su extension :");
             scanf("%s", &nombre);
             strcat(nombre, ".csv");
-            if(nombreArchivo != NULL) cargarArchivo(nombre);
+            if(cargarArchivo(nombre, artistaHT, albumHT, cancionHT) == true) printf("Musica cargada ! \n");
             else printf("El archivo .csv no existe...\n");
             break;
         case 2:
 
             break;
         case 3:
-
+            
             break;
         case 4:
             printf("Ingrese la cancion con el siguiente formato...\n");
             printf("Nombre,Artista,Minutos:Segundos,Album \n");
             fgets(linea, 1023, stdin);
             strtok(linea, "\n");
-            strcpy(cancion, strtok(linea, ","));
-            strcpy(artista, strtok(NULL, ","));
-            strcpy(auxMin, strtok(NULL, ":"));
-            strcpy(auxSeg, strtok(NULL, ","));
-            strcpy(album, strtok(NULL, "\n"));
-            minutos = atoi(auxMin);
-            segundos = atoi(auxSeg);
+            artistaAux = getLinea(linea, artistaHT);
+
             /**
              * Buscar primero si el artista existe, si no existe crearlo
              * Buscar segundo si el album existe, si no existe crearlo
@@ -113,4 +104,52 @@ int main()
         }
     }while(opcion != 9);
     return 0;
+}
+
+
+Artista *getLinea(char linea[1024], HashTable *artistaHT){
+    Artista *new;
+    char cancion[101];
+    char artista[101];
+    int minutos;
+    char auxMin[3];
+    int segundos;
+    char auxSeg[3];
+    char album[201];
+    strcpy(cancion, strtok(linea, ","));
+    strcpy(artista, strtok(NULL, ","));
+    strcpy(auxMin, strtok(NULL, ":"));
+    strcpy(auxSeg, strtok(NULL, ","));
+    strcpy(album, strtok(NULL, "\n"));
+    minutos = atoi(auxMin) * 60;
+    segundos = atoi(auxSeg);
+    strcpy(new -> nombreArtista, artista);
+    pushBack(new ->Canciones, cancion);
+    pushBack(new ->Albums, album);
+    /** searchArtista()
+     * 
+        if(searchHashTable(artistaHT, new ->nombreArtista) == NULL){        //Artista no existe
+
+        }
+        else{                               //Artista existe
+
+        }
+     * 
+     * */
+    //searchAlbum();
+    //searchCancion();
+}
+
+bool cargarArchivo(char nombre[], HashTable *artistaHT, HashTable *albumHT, HashTable *cancionHT){
+    FILE *nombreArchivo = fopen(nombre, "r");  
+    Artista *artistaAux;  
+    char linea[1024];
+    if(nombreArchivo != NULL){
+        fgets(linea, 1023, nombreArchivo);
+        strtok(linea, "\n");
+        while((fgets(linea, 1023, nombreArchivo)) != EOF){
+            artistaAux = getLinea(linea, artistaHT);
+        }
+    }else return false;
+
 }
