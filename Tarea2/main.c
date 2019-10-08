@@ -17,7 +17,7 @@ typedef struct{
 
 typedef struct{
     char nombreAlbum[201];
-    char nombreArtista[101];
+    Artista *artista;
     char generoAlbum[101];
     int fechaAlbum;
     List *Canciones;
@@ -26,11 +26,13 @@ typedef struct{
 
 typedef struct{
     char nombreCancion[101];
-    char nombreAlbum[102];
-    char nombreArtista[101];
+    Album *nombreAlbum;
+    Artista *nombreArtista;
     char genero[101];
     int duracion;               //En segundos;
 } Cancion;
+
+void importar(char linea[1024], HashTable artista, HashTable album, HashTable cancion);
 
 Artista *getLinea(char linea[1024], HashTable artistaHT);
 
@@ -70,7 +72,10 @@ int main()
             else printf("El archivo .csv no existe...\n");
             break;
         case 2:
-
+            printf("Se importará todas las canciones actuales a un csv nuevo \n");
+            printf("ingrese nombre del archivo nuevo: ");
+            scanf("%s", &linea);
+            importar(linea, artistaHT, albumHT, cancionHT);
             break;
         case 3:
             
@@ -107,6 +112,16 @@ int main()
 }
 
 
+void importar(char linea[1024], HashTable *artista, HashTable *album, HashTable *cancion){
+    FILE *archivo;
+    linea = strcat(linea,".csv");
+    archivo = fopen(linea, "w+");
+    fprintf(archivo, "Nombre,Artista,Minutos:Segundos,Album");
+
+
+
+}
+
 Artista *getLinea(char linea[1024], HashTable *artistaHT){
     Artista *new;
     char cancion[101];
@@ -126,16 +141,14 @@ Artista *getLinea(char linea[1024], HashTable *artistaHT){
     strcpy(new -> nombreArtista, artista);
     pushBack(new ->Canciones, cancion);
     pushBack(new ->Albums, album);
-    /** searchArtista()
-     * 
-        if(searchHashTable(artistaHT, new ->nombreArtista) == NULL){        //Artista no existe
+    if(searchHashTable(artistaHT, new ->nombreArtista) == NULL){        //Artista no existe
 
         }
         else{                               //Artista existe
+        if(){
 
         }
-     * 
-     * */
+        }
     //searchAlbum();
     //searchCancion();
 }
