@@ -35,7 +35,7 @@ typedef struct HashTable{
 HashTable *createHashTable(long size) {
     HashTable *tabla =(HashTable *) calloc(1, sizeof(HashTable));
     assert(tabla != NULL);                              //Si no hay memoria para reservar la Tabla
-    tabla -> valores = calloc(size, sizeof(HT_Prop));
+    tabla -> valores =(HT_Prop **) calloc(size, sizeof(HT_Prop));
     tabla -> cont = 0;
     tabla -> size = size;
     tabla -> current = -1;
@@ -154,4 +154,19 @@ void *nextHashTable(HashTable * tabla) {
         }
     }
     return NULL;
+}
+void removeAllMap(HashTable *map) {
+    assert(map != NULL); // El mapa no puede ser NULL.
+    long i;
+    for (i = 0; i < map -> size; i++) {
+        if (map -> valores[i] != NULL) free(map -> valores[i]);
+    }
+    free(map -> valores);
+    map -> cont = 0;
+    map -> current = -1;
+    map -> size = 1;
+    map -> factorCarga = (long) ceil((map -> size) * 0.77);
+    map -> valores =(HT_Prop **) calloc(map -> size, sizeof(HT_Prop));
+
+
 }
