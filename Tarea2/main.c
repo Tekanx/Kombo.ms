@@ -7,30 +7,30 @@
 #include "lista.h"
 #include "hash.h"
 #include <stdbool.h>
-
+/*
 typedef struct{
     char nombreArtista[101];
     List *Albums;
     List *Canciones;
-    
 } Artista;
 
 typedef struct{
     char nombreAlbum[201];
-    char nombreArtista[101];
+    Artista *artista;
     char generoAlbum[101];
     int fechaAlbum;
     List *Canciones;
 
 } Album;
-
+*/
 typedef struct{
     char nombreCancion[101];
-    char nombreAlbum[102];
+    char nombreAlbum[101];
     char nombreArtista[101];
-    char genero[101];
-    int duracion;               //En segundos;
+    char duracion[10];
 } Cancion;
+
+void importar(char linea[1024], HashTable artista, HashTable album, HashTable cancion);
 
 Artista *getLinea(char linea[1024], HashTable artistaHT);
 
@@ -41,7 +41,6 @@ int main()
     HashTable *artistaHT = createHashTable(1);
     HashTable *albumHT = createHashTable(1);
     HashTable *cancionHT = createHashTable(1);
-    Artista *artistaAux;
     char linea[1024];
     char nombre[301];
     int opcion;
@@ -70,7 +69,10 @@ int main()
             else printf("El archivo .csv no existe...\n");
             break;
         case 2:
-
+            printf("Se importará todas las canciones actuales a un csv nuevo \n");
+            printf("ingrese nombre del archivo nuevo: ");
+            scanf("%s", &linea);
+            importar(linea, artistaHT, albumHT, cancionHT);
             break;
         case 3:
             
@@ -107,35 +109,49 @@ int main()
 }
 
 
+void importar(char linea[1024], HashTable *artista, HashTable *album, HashTable *cancion){
+    FILE *archivo;
+    if(archivo != NULL){
+         printf("EL ARCHIVO YA CONTIENE MUSICA! \n");
+         printf("Ingrese un archivo que no contenga musica... \n");
+         fclose(archivo);
+         return;
+    }
+    else{
+        linea = strcat(linea,".csv");
+        archivo = fopen(linea, "w");
+        fprintf(archivo, "Nombre,Artista,Minutos:Segundos,Album");
+        Artista *ar = firstHashTable(artista);
+        while(ar != NULL){
+            fprintf(archivo, ar ->nombreArtista, ar -> Albums, ar ->Canciones->);
+            ar = nextHashTable(artista);
+        }
+        fclose(archivo);
+        printf("Musicas guardadas! \n");
+    }
+}
+
 Artista *getLinea(char linea[1024], HashTable *artistaHT){
     Artista *new;
     char cancion[101];
     char artista[101];
-    int minutos;
-    char auxMin[3];
-    int segundos;
-    char auxSeg[3];
+    char duracion[10];
     char album[201];
     strcpy(cancion, strtok(linea, ","));
     strcpy(artista, strtok(NULL, ","));
-    strcpy(auxMin, strtok(NULL, ":"));
-    strcpy(auxSeg, strtok(NULL, ","));
+    strcpy(duracion, strtok(NULL, ","));
     strcpy(album, strtok(NULL, "\n"));
-    minutos = atoi(auxMin) * 60;
-    segundos = atoi(auxSeg);
     strcpy(new -> nombreArtista, artista);
     pushBack(new ->Canciones, cancion);
     pushBack(new ->Albums, album);
-    /** searchArtista()
-     * 
-        if(searchHashTable(artistaHT, new ->nombreArtista) == NULL){        //Artista no existe
+    if(searchHashTable(artistaHT, new ->nombreArtista) == NULL){        //Artista no existe
 
         }
         else{                               //Artista existe
+        if(){
 
         }
-     * 
-     * */
+        }
     //searchAlbum();
     //searchCancion();
 }

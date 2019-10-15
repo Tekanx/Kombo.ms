@@ -7,16 +7,17 @@ typedef struct HT_Prop HT_Prop;
 typedef struct HashTable HashTable;
 
 /**
-
+ *createHashTable inicializa la tabla con un tamaño ya indicado como parametro
  @param size indica el tamaño que el mapa debe tener una vez que se crea
  @return retorna el mapa con el tamaño ingresado
 */
 HashTable *createHashTable(long size);
 
 /**
-
- @param
- @return
+ *
+ @param llave del mapa
+ @param Valores correspondiente de la llave
+ @return Valores del Mapa
 */
 HT_Prop *crearValores(const char *llave, void *valor);
 
