@@ -76,15 +76,21 @@ int main()
             importar(linea, artistaHT, albumHT, cancionHT);
             break;
         case 3:
-            
-            break;.
+            printf("Ingrese el nombre del Album que quiera ingresar: \n");
+            fgets(linea, 1023, stdin);
+            strtok(linea, "\n");
+            if(searchHashTable(albumHT, linea) == NULL){
+                insertHashTable(albumHT, linea, NULL);
+            } 
+            else printf("El nombre del Album que ingreso ya existe... \n"); 
+
+            break;
         case 4:
             printf("Ingrese la cancion con el siguiente formato...\n");
             printf("Nombre,Artista,Minutos:Segundos,Album \n");
             fgets(linea, 1023, stdin);
             strtok(linea, "\n");
             cancionAux = getLinea(linea);
-
             /**
              * Buscar primero si el artista existe, si no existe crearlo
              * Buscar segundo si el album existe, si no existe crearlo
@@ -111,25 +117,25 @@ int main()
 
 
 void importar(char linea[1024], HashTable *artista, HashTable *album, HashTable *cancion){
-    FILE *archivo;
+    FILE *archivo;  //open
     if(archivo != NULL){
          printf("EL ARCHIVO YA CONTIENE MUSICA! \n");
          printf("Ingrese un archivo que no contenga musica... \n");
          return;
     }
     else{
-        linea = strcat(linea,".csv");
+        linea = strcat(linea,".csv");   //antes
         archivo = fopen(linea, "w");
-        fprintf(archivo, "Nombre,Artista,Minutos:Segundos,Album");
+        fprintf(archivo, "Nombre,Artista,Minutos:Segundos,Album \r");
         Cancion *aux = firstHashTable(cancion);
         while(aux != NULL){
             fprintf(archivo, aux ->nombreArtista, aux -> nombreArtista, aux ->duracion, aux ->nombreAlbum);
             aux = nextHashTable(cancion);
         }
         fclose(archivo);
-        printf("Musicas guardadas! \n");
+        printf("Canciones guardadas en (''%s'')! \n", linea);
     }
-}
+} 
 
 Cancion *getLinea(char linea[1024]){
     Cancion *aux = (Cancion *) calloc(1, sizeof(Cancion)); 
