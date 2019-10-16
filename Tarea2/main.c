@@ -65,6 +65,7 @@ int main()
         case 1:
             printf("\nIngrese el nombre del archivo sin su extension :");
             scanf("%s", &nombre);
+            //Si
             strcat(nombre, ".csv");
             if(cargarArchivo(nombre, artistaHT, albumHT, cancionHT) == true) printf("Musica cargada ! \n");
             else printf("El archivo .csv no existe...\n");
@@ -117,15 +118,15 @@ int main()
 
 
 void importar(char linea[1024], HashTable *artista, HashTable *album, HashTable *cancion){
+    linea = strcat(linea,".csv");
     FILE *archivo;  //open
+    archivo = fopen(linea, "w");
     if(archivo != NULL){
          printf("EL ARCHIVO YA CONTIENE MUSICA! \n");
          printf("Ingrese un archivo que no contenga musica... \n");
          return;
     }
     else{
-        linea = strcat(linea,".csv");   //antes
-        archivo = fopen(linea, "w");
         fprintf(archivo, "Nombre,Artista,Minutos:Segundos,Album \r");
         Cancion *aux = firstHashTable(cancion);
         while(aux != NULL){
