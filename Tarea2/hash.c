@@ -29,7 +29,7 @@ typedef struct HashTable{
     long current;
     /** Factor de carga actual del Arreglo*/
     long factorCarga;
-
+}
 }HashTable;
 
 HashTable *createHashTable(long size) {
