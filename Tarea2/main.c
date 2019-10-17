@@ -34,14 +34,16 @@ void importar(char linea[1024], HashTable artista, HashTable album, HashTable ca
 
 Cancion *getLinea(char linea[1024]);
 
-bool cargarArchivo(char nombre[301], HashTable *artistaHT, HashTable *albumHT, HashTable *cancionHT);
+bool cargarArchivo(char nombre[301], HashTable *artistaHT, HashTable *albumHT, HashTable *cancionHT, List *listaCanciones);
 
 int main()
 {
     HashTable *artistaHT = createHashTable(1);
     HashTable *albumHT = createHashTable(1);
     HashTable *cancionHT = createHashTable(1);
+    HashTable *MapAux = createHashTable(1);
     Cancion *cancionAux =(Cancion *) calloc(1, sizeof(Cancion));
+    List *listCanciones = createList();
     char linea[1024];
     char nombre[301];
     int opcion;
@@ -66,7 +68,7 @@ int main()
             printf("\nIngrese el nombre del archivo sin su extension :");
             scanf("%s", &nombre);
             strcat(nombre, ".csv");
-            if(cargarArchivo(nombre, artistaHT, albumHT, cancionHT) == true) printf("Musica cargada ! \n");
+            if(cargarArchivo(nombre, artistaHT, albumHT, cancionHT, listCanciones) == true) printf("Musica cargada ! \n");
             else printf("El archivo .csv no existe...\n");
             break;
         case 2:
@@ -85,22 +87,38 @@ int main()
                 printf("Desea ingresar canciones al album? : (''si'' o ''no'')");
                 scanf("%s", &linea);
                 while(strcasecmp(linea, "si") == 0){
-                    printf("Ingrese nombre de la cancion : ");
+                    printf("Ingrese la cancion con el mismo formato  ");
+                    printf("Nombre,Artista,Minutos:Segundos,Album : \n");
                     fgets(linea, 1023, stdin);
-                    if(searchHashTable(cancionHT, linea) == 0){ //
-                        //Ingresar Cancion a los mapas y a mapa del album
+                    cancionAux = getLinea(linea);
+                    if(searchHashTable(cancionHT, linea) == NULL){                                  //La Cancion no existe en el mapa y, por ende, no existe en la lista de canciones
+                        insertHashTable(cancionHT, cancionAux ->nombreCancion, cancionAux);
+                        pushBack(listCanciones, cancionAux);
+                        if(searchHashTable(artistaHT, cancionAux ->nombreArtista) == NULL){         //El Artista no existe en el Mapa de Artistas
+                            insertHashTable(MapAux, cancionAux ->nombreArtista, cancionAux);
+                            insertHashTable(artistaHT, cancionAux ->nombreArtista, MapAux);
+                            removeAllMap(MapAux);                                                   //El Mapa auxiliar se limpia para evitar colisiones por usar el mismo mapa
+                        }
+                        if(searchHashTable(albumHT, cancionAux ->nombreAlbum) == NULL){             //El Album no existe en el Mapa de Albums
+                            insertHashTable(MapAux, cancionAux -> nombreAlbum, cancionAux);
+                            insertHashTable(albumHT, cancionAux -> nombreAlbum, MapAux);
+                            removeAllMap(MapAux);                                                   //El Mapa auxiliar se limpia para evitar colisiones por usar el mismo mapa
+                        }
                     }
                     printf("Desea ingresar canciones al album? : (''si'' o ''no'')");
                     scanf("%s", &linea);
                     if(strcasecmp(linea, "no") == 0) break;
-                    else printf("Error de Input... \n");
+                    else if(strcasecmp(linea, "si") != 0){
+                        printf("Error de Input... \n");
+                        break;
+                    }
                 }
             } 
             else printf("El nombre del Album que ingreso ya existe... \n"); 
             break;
         case 4:
             printf("Ingrese la cancion con el siguiente formato...\n");
-            printf("Nombre,Artista,Minutos:Segundos,Album \n");
+            printf("Nombre,Artista,Minutos:Segundos,Album : \n");
             fgets(linea, 1023, stdin);
             strtok(linea, "\n");
             cancionAux = getLinea(linea);
@@ -112,18 +130,36 @@ int main()
              * */
             break;
         case 5:
-
+        /**
+         * Eliminarcancionesdeunartista(char[]artista)
+         * ​La aplicación elimina el artista y todas sus canciones asociadas.
+         * De no existir el artista debe mostrar un mensaje al usuario
+         * **/
             break;
         case 6:
-
+        /**
+         * Buscarcanción(char[]nombre_cancion)
+         * ​La aplicación busca y muestra por pantalla la canción 
+         * correspondiente(con su respectiva información).
+         *  De no existir debe mostrar un mensaje al usuario.
+         * **/
             break;
         case 7:
-
+        /**
+         * Buscarcancionesdeunartista(char[]artista)
+         * La aplicación busca y muestra por pantalla todas las canciones realizadas por el artista
+         * con su respectiva información.
+         * De no existir el artista debe mostrar un mensaje al usuario.
+         * **/
             break;
         case 8:
-
+        /**
+         * Buscarálbum(char[]nombre_album)
+         * ​La aplicación busca y muestra por pantalla el álbum y sus canciones. 
+         * De no existir debe mostrar un mensaje al usuario.
+         * **/
             break;
-        default : printf("Opcion Invalida! \n");
+        default : printf("Opcion Invalida! Intente nuevamente\n");
         }
     }while(opcion != 9);
     return 0;
@@ -161,7 +197,7 @@ Cancion *getLinea(char linea[1024]){
     return new;
 }
 
-bool cargarArchivo(char nombre[301], HashTable *artistaHT, HashTable *albumHT, HashTable *cancionHT){
+bool cargarArchivo(char nombre[301], HashTable *artistaHT, HashTable *albumHT, HashTable *cancionHT, List *listaCanciones){
     FILE *nombreArchivo = fopen(nombre, "r");  
     Cancion *cancionAux =(Cancion *) calloc(1, sizeof(Cancion));  
     HashTable *mapAux = createHashTable(1);
@@ -173,16 +209,17 @@ bool cargarArchivo(char nombre[301], HashTable *artistaHT, HashTable *albumHT, H
             cancionAux = getLinea(linea);
             if(searchHashTable(cancionHT, cancionAux ->nombreCancion) == NULL){         //La Cancion no existe en el mapa de Canciones
                 insertHashTable(cancionHT, cancionAux ->nombreCancion, cancionAux);
-            }
-            if(searchHashTable(artistaHT, cancionAux ->nombreArtista) == NULL){         //El Artista no existe en el Mapa de Artistas
-                insertHashTable(mapAux, cancionAux ->nombreArtista, cancionAux);
-                insertHashTable(artistaHT, cancionAux ->nombreArtista, mapAux);
-                removeAllMap(mapAux);                                                   //El Mapa auxiliar se limpia para evitar colisiones por usar el mismo mapa
-            }
-            if(searchHashTable(albumHT, cancionAux ->nombreAlbum) == NULL){             //El Album no existe en el Mapa de Albums
-                insertHashTable(mapAux, cancionAux -> nombreAlbum, cancionAux);
-                insertHashTable(albumHT, cancionAux -> nombreAlbum, mapAux);
-                removeAllMap(mapAux);                                                   //El Mapa auxiliar se limpia para evitar colisiones por usar el mismo mapa
+                pushBack(listaCanciones, cancionAux);
+                if(searchHashTable(artistaHT, cancionAux ->nombreArtista) == NULL){         //El Artista no existe en el Mapa de Artistas
+                    insertHashTable(mapAux, cancionAux ->nombreArtista, cancionAux);
+                    insertHashTable(artistaHT, cancionAux ->nombreArtista, mapAux);
+                    removeAllMap(mapAux);                                                   //El Mapa auxiliar se limpia para evitar colisiones por usar el mismo mapa
+                }
+                if(searchHashTable(albumHT, cancionAux ->nombreAlbum) == NULL){             //El Album no existe en el Mapa de Albums
+                    insertHashTable(mapAux, cancionAux -> nombreAlbum, cancionAux);
+                    insertHashTable(albumHT, cancionAux -> nombreAlbum, mapAux);
+                    removeAllMap(mapAux);                                                   //El Mapa auxiliar se limpia para evitar colisiones por usar el mismo mapa
+                }
             }
         }
     }else return false;
