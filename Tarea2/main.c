@@ -71,17 +71,30 @@ int main()
             else printf("El archivo .csv no existe...\n");
             break;
         case 2:
-            printf("Se importará todas las canciones actuales a un csv nuevo \n");
+            printf("Se importará todas las canciones actuales a un csv nuevo !\n");
             printf("ingrese nombre del archivo nuevo: ");
             scanf("%s", &linea);
             importar(linea, artistaHT, albumHT, cancionHT);
             break;
         case 3:
-            printf("Ingrese el nombre del Album que quiera ingresar: \n");
+            printf("Ingrese el nombre del Album que quiera ingresar: ");
             fgets(linea, 1023, stdin);
             strtok(linea, "\n");
             if(searchHashTable(albumHT, linea) == NULL){
                 insertHashTable(albumHT, linea, NULL);
+                printf("Desea ingresar canciones al album? : (''si'' o ''no'')");
+                scanf("%s", &linea);
+                while(strcasecmp(linea, "si") == 0){
+                    printf("Ingrese nombre de la cancion : ");
+                    fgets(linea, 1023, stdin);
+                    if(searchHashTable(cancionHT, linea) == 0){ //
+                        //Ingresar Cancion a los mapas y a mapa del album
+                    }
+                    printf("Desea ingresar canciones al album? : (''si'' o ''no'')");
+                    scanf("%s", &linea);
+                    if(strcasecmp(linea, "no") == 0) break;
+                    else printf("Error de Input... \n");
+                }
             } 
             else printf("El nombre del Album que ingreso ya existe... \n"); 
 
@@ -177,5 +190,6 @@ bool cargarArchivo(char nombre[301], HashTable *artistaHT, HashTable *albumHT, H
                 removeAllMap(mapAux);                                                   //El Mapa auxiliar se limpia para evitar colisiones por usar el mismo mapa
             }
         }
-    }else printf("Archivo Vacío... Ingrese uno con musica \n");
+    }else return false;
+    return true;
 }
