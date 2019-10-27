@@ -1,6 +1,6 @@
 /*
     Roberto Isla & Matias Garcia
-    20.184.001-5 &
+    20.184.001-5 & 20.181.753-6
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,8 +11,14 @@
 typedef struct{
     char *nombre;
     List *canciones;
-    HashTable *canciones;
+    HashTable *Canciones;
 } Album;
+
+typedef struct{
+    char *nombre;
+    List *canciones;
+    HashTable *Canciones
+}artista;
 
 typedef struct{
     char *nombreCancion;
@@ -37,6 +43,8 @@ int main(){
     char linea[1024];
     char nombre[301];
     char albumAux[301];
+    char artistaAux[301];
+    char *CancionAux;
     int opcion;
     do{
         printf(" _____________________________________________\n");
@@ -52,7 +60,9 @@ int main(){
         printf("| 8.- Buscar album                            |\n");
         printf("| 9.- Salir del Gestionador                   |\n");
         printf("|_____________________________________________|\n");
+        printf("    Ingrese opcion: ");
         scanf("%d", &opcion);
+        printf("\n");
         getchar();
         switch(opcion){
         case 1:
@@ -88,7 +98,7 @@ int main(){
                     album = get_csv_field(linea, 4);
                     fecha = atoi(get_csv_field(linea, 5));
             cancionAux = crearCancion(nombre, artista, duracion, album, fecha);
-            */      
+            */
                     printf("Desea ingresar canciones al album %s? : (''si'' o ''no'')", albumAux);
                     scanf("%s", &linea);
                     if(strcasecmp(linea, "no") == 0) {
@@ -110,42 +120,98 @@ int main(){
             fgets(linea, 1023, stdin);
             strtok(linea, "\n");
             cancionAux = getLinea(linea);
+             //* Buscar primero si el artista existe, si no existe crearlo
+            if(searchHashTable(artistaHT,artistaAux)== NULL){
 
-            /**
-             * Buscar primero si el artista existe, si no existe crearlo
-             * Buscar segundo si el album existe, si no existe crearlo
-             * Buscar si en el Album la cancion ya existe, sino nox agregarla
-             * */
+            }else{
+
+            }
+             //* Buscar segundo si el album existe, si no existe crearlo
+            if(searchHashTable(artistaHT,artistaAux)== NULL){
+
+            }else{
+
+            }
+             //* Buscar si en el Album la cancion ya existe, sino nox agregarla
+            if(searchHashTable(artistaHT,artistaAux)== NULL){
+
+            }else{
+
+            }
             break;
         case 5:
-        /**
-         * Eliminarcancionesdeunartista(char[]artista)
-         * ​La aplicación elimina el artista y todas sus canciones asociadas.
-         * De no existir el artista debe mostrar un mensaje al usuario
-         * **/
+            printf("ingrese Artista a borrar\n");
+            printf("Artista: ");
+            fgets(artistaAux, 300, stdin);
+            if(searchHashTable(artistaHT,artistaAux)== NULL){
+                   printf("\n");
+                   printf("El artista no existe en el sistema\n")//* De no existir el artista debe mostrar un mensaje al usuario
+            }else{
+            //* Eliminarcancionesdeunartista(char[]artista)
+
+            //* ​La aplicación elimina el artista y todas sus canciones asociadas.
+            }
+
+
+
+
             break;
         case 6:
-        /**
-         * Buscarcanción(char[]nombre_cancion)
-         * ​La aplicación busca y muestra por pantalla la canción
-         * correspondiente(con su respectiva información).
-         *  De no existir debe mostrar un mensaje al usuario.
-         * **/
+            printf("Ingrese cancion a buscar\n");
+            printf("Cancion: ");
+            fgets(nombre, 300, stdin);
+            if(searchHashTable(,)== NULL){
+                printf("La cancion ingresada no existe \n");//* De no existir el artista debe mostrar un mensaje al usuario.
+                break;
+            }else{
+         //* Buscarcanción(char[]nombre_cancion)
+
+         //* ​La aplicación busca y muestra por pantalla la canción
+
+         //* correspondiente(con su respectiva información).
+
             break;
         case 7:
-        /**
-         * Buscarcancionesdeunartista(char[]artista)
-         * La aplicación busca y muestra por pantalla todas las canciones realizadas por el artista
-         * con su respectiva información.
-         * De no existir el artista debe mostrar un mensaje al usuario.
-         * **/
+            printf("ingrese nombre del Artista \n");
+            printf("autor: ");
+            fgets(artistaAux, 300, stdin);
+         //* Buscarcancionesdeunartista(char[]artista)
+            if(searchHashTable(artistaHT,artistaAux)== NULL){
+                printf("El Artista ingresado no existe \n");//* De no existir el artista debe mostrar un mensaje al usuario.
+                break;
+            }else{
+                CancionAux = searchHashTable(artistaHT,artistaAux)
+                = first(artistaHT->canciones);//se
+                while(1){
+                    cancionAux
+                    printf("Cancion: %s\n",searchHashTable(artistaHT,artistaAux));//* La aplicación busca y muestra por pantalla todas las canciones realizadas por el artista
+                    printf("-Duracion: %s\n",searchHashTable(artistaHT,artistaAux));//* con su respectiva información.
+                }
+            }
+         //* De no existir el artista debe mostrar un mensaje al usuario.
+
             break;
         case 8:
-        /**
-         * Buscarálbum(char[]nombre_album)
-         * ​La aplicación busca y muestra por pantalla el álbum y sus canciones.
-         * De no existir debe mostrar un mensaje al usuario.
-         * **/
+            printf("Ingrese el Album que quiere ver\n");
+            printf("Album: ");
+            fgets(albumAux, 300, stdin);
+            printf("\n");
+         //* Buscarálbum(char[]nombre_album)
+            if(searchHashTable(albumHT,albumAux)== NULL){//* De no existir debe mostrar un mensaje al usuario.
+                printf("El Album ingresado no existe \n");
+                break;
+            }else{
+                CancionAux = first(albumHT->canciones);
+                printf("Album: %s\n",&albumAux);
+                while(1){//* ​La aplicación busca y muestra por pantalla el álbum y sus canciones.
+                    cancionAux
+                    printf("Cancion: %s\n",searchHashTable(albumHT  ,artistaAux));
+                    printf("-Duracion: %s\n",searchHashTable(albumHT,artistaAux));
+                }
+            }
+            break;
+        case 9:
+            printf("            Hasta luego!!");
             break;
         default : printf("Opcion Invalida! Intente nuevamente\n");
         }
@@ -221,9 +287,9 @@ bool cargarArchivo(char nombre[301], HashTable *artistaHT, HashTable *albumHT){
 
             }
             else{
-                
+
             }
-            
+
         }
     }else return false;
     return true;
