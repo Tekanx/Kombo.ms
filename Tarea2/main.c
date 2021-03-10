@@ -72,12 +72,14 @@ int main(){
             if(cargarArchivo(nombre, artistaHT, albumHT) == true) printf("Musica cargada ! \n");
             else printf("El archivo .csv no existe...\n");
             break;
+
         case 2:
             printf("Se importara todas las canciones actuales a un csv nuevo !\n");
             printf("ingrese nombre del archivo nuevo: ");
             scanf("%s", &linea);
             importar(linea, artistaHT, albumHT);
             break;
+
         case 3:
             printf("Se ingresara el album solo si no existe, caso opuesto no se creara \n");
             printf("Ingrese nombre del Album : ");
@@ -88,17 +90,6 @@ int main(){
                 printf("Desea ingresar canciones al album? : (''si'' o ''no'')");
                 scanf("%s", &linea);
                 while(strcasecmp(linea, "si") == 0){
-                    /*
-                    printf("Ingrese la cancion con el mismo formato  ");
-                    printf("Nombre,Artista,Minutos:Segundos,Album : \n");
-                    fgets(linea, 1023, stdin);
-                    nombre = get_csv_field(linea, 1);
-                    artista = get_csv_field(linea, 2);
-                    duracion = get_csv_field(linea, 3);
-                    album = get_csv_field(linea, 4);
-                    fecha = atoi(get_csv_field(linea, 5));
-            cancionAux = crearCancion(nombre, artista, duracion, album, fecha);
-            */
                     printf("Desea ingresar canciones al album %s? : (''si'' o ''no'')", albumAux);
                     scanf("%s", &linea);
                     if(strcasecmp(linea, "no") == 0) {
@@ -114,31 +105,30 @@ int main(){
             }
             else printf("El Album %s ya existe... \n", albumAux);
             break;
+
         case 4:
             printf("Ingrese la cancion con el siguiente formato...\n");
             printf("Nombre,Artista,Minutos:Segundos,Album : \n");
             fgets(linea, 1023, stdin);
             strtok(linea, "\n");
             cancionAux = getLinea(linea);
-             //* Buscar primero si el artista existe, si no existe crearlo
             if(searchHashTable(artistaHT,artistaAux)== NULL){
-
+                //* Buscar primero si el artista existe, si no existe crearlo
             }else{
 
             }
-             //* Buscar segundo si el album existe, si no existe crearlo
             if(searchHashTable(artistaHT,artistaAux)== NULL){
-
+                //* Buscar segundo si el album existe, si no existe crearlo
             }else{
 
             }
-             //* Buscar si en el Album la cancion ya existe, sino nox agregarla
             if(searchHashTable(artistaHT,artistaAux)== NULL){
-
+                //* Buscar si en el Album la cancion ya existe, sino nox agregarla
             }else{
 
             }
             break;
+
         case 5:
             printf("ingrese Artista a borrar\n");
             printf("Artista: ");
@@ -151,11 +141,8 @@ int main(){
 
             //* ​La aplicación elimina el artista y todas sus canciones asociadas.
             }
-
-
-
-
             break;
+
         case 6:
             printf("Ingrese cancion a buscar\n");
             printf("Cancion: ");
@@ -171,6 +158,7 @@ int main(){
          //* correspondiente(con su respectiva información).
 
             break;
+
         case 7:
             printf("ingrese nombre del Artista \n");
             printf("autor: ");
@@ -191,6 +179,7 @@ int main(){
          //* De no existir el artista debe mostrar un mensaje al usuario.
 
             break;
+
         case 8:
             printf("Ingrese el Album que quiere ver\n");
             printf("Album: ");
@@ -210,10 +199,12 @@ int main(){
                 }
             }
             break;
+
         case 9:
             printf("            Hasta luego!!");
             break;
-        default : printf("Opcion Invalida! Intente nuevamente\n");
+
+        default: printf("Opcion Invalida! Intente nuevamente\n");
         }
     }while(opcion != 9);
     return 0;
